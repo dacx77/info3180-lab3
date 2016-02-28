@@ -35,6 +35,43 @@ def send_text_file(file_name):
     """Send your static text file."""
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
+    
+@app.route('/contact/')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/mail',methods = ['GET' , 'POST'])
+def sendmail():
+    import smtplib
+    import string
+
+    fromname = request.form ['element_1']
+    toname = request.form ['element_2']
+    fromaddr = 'dacx77@gmail.com'
+    toaddr  = 'dacxproductionsja@gmail.com'
+    subject = request.form ['element_3']
+    msg = request.form ['element_4'] 
+
+    messagetosend = string.join((
+        "From: %s" % fromaddr,
+        "To: %s" % toaddr,
+        "Subject: %s" %subject,
+        "",
+        msg), "\r\n")
+    
+
+    # Credentials (if needed)
+    username = 'dacx77@gmail.com'
+    password = 'pldvmqjwmedemezr'
+    
+    # The actual mail send
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.starttls()
+    server.login(username,password)
+    server.sendmail(fromaddr, toaddr, messagetosend)
+    server.quit()
+    pass
+
 
 
 @app.after_request
